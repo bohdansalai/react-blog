@@ -1,0 +1,46 @@
+.editPostForm{
+    position: fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    z-index:100;
+    background-color: white;
+     width: 350px;
+     padding: 10px;
+     text-align: center;
+     border-radius: 10px;
+     padding: 20px;
+}
+.hideBtn{
+    position: absolute;
+    top:4px;
+    right:4px;
+}
+.editFormInput{
+    width:100%;
+    padding: 2px 5px;
+    border-radius: 8px;
+    border: 1px solid rgb(128, 128, 128)
+}
+.editPostForm div{
+    margin-top: 10px;
+}
+.editPostForm h2{
+    margin:0;
+    margin-bottom: 10px;
+}
+.editFormInput:focus::placeholder{
+    color:transparent;
+}
+.overlay{
+    position: fixed;
+    left:0;
+    top:0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+
+    background-color: rgba(1, 1, 1, 0.5);
+}

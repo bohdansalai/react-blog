@@ -3,3 +3,7 @@
     align-items:center;
     justify-content: space-between;
 }
+.postControl {
+    display:flex;
+    align-items: center;
+}

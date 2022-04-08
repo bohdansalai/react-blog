@@ -1,6 +1,6 @@
 import React from "react";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { faHeart, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BlogCard.css";
 
@@ -10,10 +10,15 @@ export const BlogCard = ({
   liked,
   likePost,
   deletePost,
+  handleEditFormShow,
+  handleSelectPost,
 }) => {
-  const heartFill = liked ? "crimson" : "black";
+  const showEditForm = () => {
+    handleSelectPost();
+    handleEditFormShow();
+  };
 
-  const heartStyles = {};
+  const heartFill = liked ? "crimson" : "black";
 
   return (
     <div className="post">
@@ -30,9 +35,14 @@ export const BlogCard = ({
           </button>
         </div>
       </div>
-      <button className="deleteBtn" onClick={deletePost}>
-        <FontAwesomeIcon icon={faTrash} size="xl" />
-      </button>
+      <div className="postControl">
+        <button onClick={showEditForm}>
+          <FontAwesomeIcon icon={faEdit} size="xl" />
+        </button>
+        <button className="deleteBtn" onClick={deletePost}>
+          <FontAwesomeIcon icon={faTrash} size="xl" />
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import React from "react";
-import "./AddPostForm.css";
+import "./EditPostForm.css";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export class AddPostForm extends React.Component {
+export class EditPostForm extends React.Component {
   state = {
-    postTitle: "",
-    postDesc: "",
+    postTitle: this.props.selectedPost.title,
+    postDesc: this.props.selectedPost.description,
   };
 
   handlePostTitleChange = (e) => {
@@ -17,21 +17,22 @@ export class AddPostForm extends React.Component {
   };
   handleEnter = (e) => {
     if (e.key === "Enter" && this.state.postTitle && this.state.postDesc)
-      this.createPost(e);
+      this.updatePost(e);
   };
-  createPost = (e) => {
+  updatePost = (e) => {
     e.preventDefault();
     const post = {
+      id: this.props.selectedPost.id,
       title: this.state.postTitle,
       description: this.state.postDesc,
-      liked: false,
+      liked: this.props.selectedPost.liked,
     };
 
-    this.props.addNewBlogPost(post);
-    this.props.handleAddFormHide();
+    this.props.editBlogPost(post);
+    this.props.handleEditFormHide();
   };
   handleEscape = (e) => {
-    if (e.key === "Escape") this.props.handleAddFormHide();
+    if (e.key === "Escape") this.props.handleEditFormHide();
   };
   componentDidMount() {
     window.addEventListener("keyup", this.handleEnter);
@@ -43,17 +44,21 @@ export class AddPostForm extends React.Component {
   }
 
   render() {
-    const handleAddFormHide = this.props.handleAddFormHide;
+    const handleEditFormHide = this.props.handleEditFormHide;
     return (
       <>
-        <form className="addPostForm" onSubmit={this.createPost}>
-          <button className="hideBtn" type="button" onClick={handleAddFormHide}>
+        <form className="editPostForm" onSubmit={this.updatePost}>
+          <button
+            className="hideBtn"
+            type="button"
+            onClick={handleEditFormHide}
+          >
             <FontAwesomeIcon icon={faTimes} size="xl" />
           </button>
-          <h2>Creating post</h2>
+          <h2>Editing post</h2>
           <div>
             <input
-              className="addFormInput"
+              className="editFormInput"
               type="text"
               name="postTitle"
               placeholder="Title"
@@ -67,18 +72,18 @@ export class AddPostForm extends React.Component {
               className="addFormInput"
               name="postDescription"
               placeholder="Information "
-              value={this.state.postDescription}
+              value={this.state.postDesc}
               onChange={this.handlePostDescChange}
               required
             />
           </div>
           <div>
             <button type="submit" className="blackBtn">
-              Add post
+              Save post
             </button>
           </div>
         </form>
-        <div className="overlay" onClick={handleAddFormHide}></div>
+        <div className="overlay" onClick={handleEditFormHide}></div>
       </>
     );
   }
