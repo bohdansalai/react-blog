@@ -1,4 +1,5 @@
-import { faRupiahSign } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { Component, useState } from "react";
 import { postsUrl } from "../../shared/projectData";
@@ -88,19 +89,6 @@ export class BlogContent extends Component {
   handleEscape = (e) => {
     if (e.key === "Escape" && this.state.showAddForm) this.handleAddFormHide();
   };
-  // handleEnter = (e) => {
-  //   console.log(this.props.postTitle);
-  //   if (e.key === "Enter" && this.state.postTitle && this.state.postDesc)
-  //     this.createPost(e);
-  // };
-  // handleEnter = (e) => {
-  //   if (e.key === "Enter" && this.state.showAddForm) {
-  //     e.preventDefault();
-  //     console.log(e);
-  //     this.addNewBlogPost(blogPost);
-  //   }
-  // };
-
   componentDidMount() {
     this.fetchPosts();
     window.addEventListener("keyup", this.handleEscape);
@@ -127,6 +115,8 @@ export class BlogContent extends Component {
 
     if (this.state.blogArr.length === 0) return <h1>Loading data</h1>;
 
+    const postsOpacity = this.state.isPending ? 0.5 : 1;
+
     return (
       <div className="blogPage">
         {this.state.showAddForm && (
@@ -144,8 +134,16 @@ export class BlogContent extends Component {
               Create new post
             </button>
           </div>
-          {this.state.isPending && <h2>Wait</h2>}
-          <div className="posts">{blogPosts}</div>
+          {this.state.isPending && (
+            <FontAwesomeIcon
+              icon={faSpinner}
+              className="icon-spin preloader"
+              size="xl"
+            />
+          )}
+          <div className="posts" style={{ opacity: postsOpacity }}>
+            {blogPosts}
+          </div>
         </>
       </div>
     );

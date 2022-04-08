@@ -1,5 +1,6 @@
 .addNewPost{
     text-align: center;
+    position: relative
 }
 
 .posts {
@@ -15,4 +16,10 @@
 }
 .blackBtn:hover{
     background-color: rgba(1,1,1,0.8);
+}
+.preloader {
+    position: absolute;
+    left: 50%;
+    top:50%;
+
 }
