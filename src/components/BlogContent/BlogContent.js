@@ -14,9 +14,6 @@ export class BlogContent extends Component {
     isPending: false,
   };
   fetchPosts = () => {
-    this.setState({
-      isPending: true,
-    });
     axios
       .get(postsUrl)
       .then((response) => {
@@ -29,18 +26,24 @@ export class BlogContent extends Component {
         console.log(err);
       });
   };
-  likePost = (pos) => {
-    this.setState((state) => {
-      const temp = [...state.blogArr];
-      temp[pos].liked = !temp[pos].liked;
-      localStorage.setItem("blogPosts", JSON.stringify(temp));
-      return {
-        blogArr: temp,
-      };
-    });
+  likePost = (blogPost) => {
+    const temp = { ...blogPost };
+    temp.liked = !temp.liked;
+    axios
+      .put(postsUrl + blogPost.id, temp)
+      .then((response) => {
+        console.log(response);
+        this.fetchPosts();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   deletePost = (blogPost) => {
     if (window.confirm(`Do you want to delete ${blogPost.title}?`)) {
+      this.setState({
+        isPending: true,
+      });
       axios
         .delete(postsUrl + blogPost.id)
         .then((response) => {
@@ -62,15 +65,26 @@ export class BlogContent extends Component {
       // });
     }
   };
-
+  addNewBlogPost = (blogPost) => {
+    this.setState({
+      isPending: true,
+    });
+    axios
+      .post(postsUrl, blogPost)
+      .then((response) => {
+        console.log("created post ", response.data);
+        this.fetchPosts();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   handleAddFormShow = () => {
     this.setState({ showAddForm: true });
   };
-
   handleAddFormHide = () => {
     this.setState({ showAddForm: false });
   };
-
   handleEscape = (e) => {
     if (e.key === "Escape" && this.state.showAddForm) this.handleAddFormHide();
   };
@@ -86,17 +100,6 @@ export class BlogContent extends Component {
   //     this.addNewBlogPost(blogPost);
   //   }
   // };
-
-  addNewBlogPost = (blogPost) => {
-    this.setState((state) => {
-      const posts = [...state.blogArr];
-      posts.push(blogPost);
-      localStorage.setItem("blogPosts", JSON.stringify(posts));
-      return {
-        blogArr: posts,
-      };
-    });
-  };
 
   componentDidMount() {
     this.fetchPosts();
@@ -116,7 +119,7 @@ export class BlogContent extends Component {
           title={item.title}
           description={item.description}
           liked={item.liked}
-          likePost={() => this.likePost(pos)}
+          likePost={() => this.likePost(item)}
           deletePost={() => this.deletePost(item)}
         />
       );
