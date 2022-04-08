@@ -15,18 +15,36 @@ export class AddPostForm extends React.Component {
   handlePostDescChange = (e) => {
     this.setState({ postDesc: e.target.value });
   };
+  handleEnter = (e) => {
+    if (e.key === "Enter" && this.state.postTitle && this.state.postDesc)
+      this.createPost(e);
+  };
+  createPost = (e) => {
+    e.preventDefault();
+    const post = {
+      id: this.props.blogArr.length + 1,
+      title: this.state.postTitle,
+      description: this.state.postDesc,
+      liked: false,
+    };
+
+    this.props.addNewBlogPost(post);
+    this.props.handleAddFormHide();
+  };
+  componentDidMount() {
+    window.addEventListener("keyup", this.handleEnter);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("keyup", this.handleEnter);
+  }
 
   render() {
     const handleAddFormHide = this.props.handleAddFormHide;
     return (
       <>
-        <form className="addPostForm" action="">
-          <button className="hideBtn">
-            <FontAwesomeIcon
-              icon={faTimes}
-              onClick="handleAddFormHide"
-              size="xl"
-            />
+        <form className="addPostForm" onSubmit={this.createPost}>
+          <button className="hideBtn" type="button" onClick={handleAddFormHide}>
+            <FontAwesomeIcon icon={faTimes} size="xl" />
           </button>
           <h2>Creating post</h2>
           <div>
@@ -37,6 +55,7 @@ export class AddPostForm extends React.Component {
               placeholder="Title"
               value={this.state.postTitle}
               onChange={this.handlePostTitleChange}
+              required
             />
           </div>
           <div>
@@ -46,14 +65,11 @@ export class AddPostForm extends React.Component {
               placeholder="Information "
               value={this.state.postDescription}
               onChange={this.handlePostDescChange}
+              required
             />
           </div>
           <div>
-            <button
-              type="button"
-              onClick={handleAddFormHide}
-              className="blackBtn "
-            >
+            <button type="submit" className="blackBtn">
               Add post
             </button>
           </div>
