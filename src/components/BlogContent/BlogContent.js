@@ -11,8 +11,24 @@ export class BlogContent extends Component {
   state = {
     showAddForm: false,
     blogArr: [],
+    isPending: false,
   };
-
+  fetchPosts = () => {
+    this.setState({
+      isPending: true,
+    });
+    axios
+      .get(postsUrl)
+      .then((response) => {
+        this.setState({
+          blogArr: response.data,
+          isPending: false,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   likePost = (pos) => {
     this.setState((state) => {
       const temp = [...state.blogArr];
@@ -23,19 +39,27 @@ export class BlogContent extends Component {
       };
     });
   };
+  deletePost = (blogPost) => {
+    if (window.confirm(`Do you want to delete ${blogPost.title}?`)) {
+      axios
+        .delete(postsUrl + blogPost.id)
+        .then((response) => {
+          console.log("post deleted " + response.data);
+          this.fetchPosts();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-  deletePost = (pos) => {
-    if (
-      window.confirm(`Do you want to delete ${this.state.blogArr[pos].title}?`)
-    ) {
-      this.setState((state) => {
-        const temp = [...state.blogArr];
-        temp.splice(pos, 1);
-        localStorage.setItem("blogPosts", JSON.stringify(temp));
-        return {
-          blogArr: temp,
-        };
-      });
+      // this.setState((state) => {
+      //   axios.delete(' ')
+      //   const temp = [...state.blogArr];
+      //   temp.splice(pos, 1);
+      //   localStorage.setItem("blogPosts", JSON.stringify(temp));
+      //   return {
+      //     blogArr: temp,
+      //   };
+      // });
     }
   };
 
@@ -75,16 +99,7 @@ export class BlogContent extends Component {
   };
 
   componentDidMount() {
-    axios
-      .get(postsUrl)
-      .then((response) => {
-        this.setState({
-          blogArr: response.data,
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    this.fetchPosts();
     window.addEventListener("keyup", this.handleEscape);
     // window.addEventListener("keyup", this.handleEnter);
   }
@@ -102,7 +117,7 @@ export class BlogContent extends Component {
           description={item.description}
           liked={item.liked}
           likePost={() => this.likePost(pos)}
-          deletePost={() => this.deletePost(pos)}
+          deletePost={() => this.deletePost(item)}
         />
       );
     });
@@ -126,6 +141,7 @@ export class BlogContent extends Component {
               Create new post
             </button>
           </div>
+          {this.state.isPending && <h2>Wait</h2>}
           <div className="posts">{blogPosts}</div>
         </>
       </div>
