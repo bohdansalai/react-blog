@@ -1,11 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 
-export const LoginPage = (props) => {
+export const LoginPage = ({ setIsLoggedIn, setUserName }) => {
   const history = useNavigate();
+
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLoginChange = (e) => {
+    setLogin(e.target.value);
+  };
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
   const handleLogIn = (e) => {
     e.preventDefault();
+
+    localStorage.setItem("isLoggedIn", true);
+    localStorage.setItem("userName", login);
+
+    setUserName(login);
+    setIsLoggedIn(true);
     history("/");
   };
 
@@ -19,6 +36,7 @@ export const LoginPage = (props) => {
             type="text"
             placeholder="login"
             required
+            onChange={handleLoginChange}
           />
         </div>
         <div>
@@ -27,6 +45,7 @@ export const LoginPage = (props) => {
             type="password"
             placeholder="password"
             required
+            onChange={handlePasswordChange}
           />
         </div>
         <div>
