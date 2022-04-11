@@ -4,12 +4,12 @@ import axios from "axios";
 import React, { Component, useState } from "react";
 import { postsUrl } from "../../shared/projectData";
 import { getAmountOfPosts } from "../../shared/projectLogic";
-import "./BlogContent.css";
+import "./BlogPage.css";
 import { AddPostForm } from "./components/AddPostForm";
 import { BlogCard } from "./components/BlogCard";
 import { EditPostForm } from "./components/EditPostForm";
 
-export class BlogContent extends Component {
+export class BlogPage extends Component {
   state = {
     showAddForm: false,
     showEditForm: false,

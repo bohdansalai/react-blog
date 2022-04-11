@@ -1,0 +1,16 @@
+.addNewPost{
+    text-align: center;
+    position: relative
+}
+
+.posts {
+    width:900px;
+    margin: 0 auto;
+}
+
+.preloader {
+    position: absolute;
+    left: 50%;
+    top:50%;
+
+}
