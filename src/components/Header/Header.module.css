@@ -6,20 +6,19 @@ header {
   }
 
   header a {
-    font-weight: 500;
+    color: rgb(138, 136, 136);
     transition: all .2s linear;
     border-bottom: 2px solid transparent;
     font-size: 18px;
-
     display: inline-block;
     margin: 0 10px;
   }
 
   header a:hover {
-    color: #d15700
+    color: crimson
   }
 
   .activeLink {
-    color:crimson;
+    color:black;
     font-weight: 600;
   }

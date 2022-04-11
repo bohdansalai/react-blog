@@ -75,6 +75,7 @@ export class EditPostForm extends React.Component {
               value={this.state.postDesc}
               onChange={this.handlePostDescChange}
               required
+              rows="8"
             />
           </div>
           <div>

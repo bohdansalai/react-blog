@@ -9,6 +9,8 @@ import { AddPostForm } from "./components/AddPostForm";
 import { BlogCard } from "./components/BlogCard";
 import { EditPostForm } from "./components/EditPostForm";
 
+let source;
+
 export class BlogPage extends Component {
   state = {
     showAddForm: false,
@@ -18,8 +20,9 @@ export class BlogPage extends Component {
     selectedPost: {},
   };
   fetchPosts = () => {
+    source = axios.CancelToken.source();
     axios
-      .get(postsUrl)
+      .get(postsUrl, { cancelToken: source.token })
       .then((response) => {
         this.setState({
           blogArr: response.data,
@@ -30,6 +33,14 @@ export class BlogPage extends Component {
         console.log(err);
       });
   };
+  componentDidMount() {
+    this.fetchPosts();
+  }
+  componentWillUnmount() {
+    if (source) {
+      source.cancel();
+    }
+  }
   likePost = (blogPost) => {
     const temp = { ...blogPost };
     temp.liked = !temp.liked;
@@ -116,9 +127,6 @@ export class BlogPage extends Component {
       selectedPost: blogPost,
     });
   };
-  componentDidMount() {
-    this.fetchPosts();
-  }
 
   render() {
     const blogPosts = this.state.blogArr.map((item, pos) => {

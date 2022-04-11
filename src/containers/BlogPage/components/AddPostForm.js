@@ -70,6 +70,7 @@ export class AddPostForm extends React.Component {
               value={this.state.postDescription}
               onChange={this.handlePostDescChange}
               required
+              rows="8"
             />
           </div>
           <div>
