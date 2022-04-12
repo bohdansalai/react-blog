@@ -11,6 +11,9 @@ import {
   Navigate,
 } from "react-router-dom";
 import { LoginPage } from "./containers/LoginPage/LoginPage";
+import { NotFoundPage } from "./containers/NotFoundPage/NotFoundPage";
+import { PublicRoute } from "./components/PublicRoute/PublicRoute";
+import { PrivateRoute } from "./components/PrivateRoute/PrivateRoute";
 
 export function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -30,33 +33,27 @@ export function App() {
           <main>
             <Routes>
               <Route
-                exact
-                path="/"
-                element={
-                  !isLoggedIn ? (
-                    <Navigate to="/login" />
-                  ) : (
-                    <Navigate to="/blog" />
-                  )
-                }
-              />
-              <Route
                 path="/login"
                 element={
-                  !isLoggedIn ? (
+                  <PublicRoute isLoggedIn={isLoggedIn}>
                     <LoginPage
                       setUserName={setUserName}
                       setIsLoggedIn={setIsLoggedIn}
                     />
-                  ) : (
-                    <Navigate to="/blog" />
-                  )
+                  </PublicRoute>
                 }
               />
               <Route
                 path="/blog"
-                element={!isLoggedIn ? <Navigate to="/login" /> : <BlogPage />}
+                element={
+                  <PrivateRoute isLoggedIn={isLoggedIn}>
+                    <BlogPage />
+                  </PrivateRoute>
+                }
               />
+              <Route path="/404" element={<NotFoundPage />} />
+              <Route path="/" element={<Navigate to="/blog" />} />
+              <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
           </main>
           <Footer year={new Date().getFullYear()} />
