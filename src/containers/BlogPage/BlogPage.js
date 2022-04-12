@@ -94,22 +94,21 @@ export class BlogPage extends Component {
         console.log(err);
       });
   };
-
   editBlogPost = (updatedBlogPost) => {
+    console.log(updatedBlogPost);
     this.setState({
       isPending: true,
     });
     axios
       .put(postsUrl + updatedBlogPost.id, updatedBlogPost)
       .then((response) => {
-        console.log("updated  post ", response.data);
+        // console.log("updated  post ", response.data);
         this.fetchPosts();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
   handleAddFormShow = () => {
     this.setState({ showAddForm: true });
   };

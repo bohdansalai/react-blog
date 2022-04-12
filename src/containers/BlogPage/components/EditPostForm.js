@@ -1,91 +1,78 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./EditPostForm.css";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export class EditPostForm extends React.Component {
-  state = {
-    postTitle: this.props.selectedPost.title,
-    postDesc: this.props.selectedPost.description,
-  };
+export const EditPostForm = (props) => {
+  const [postTitle, setPostTitle] = useState(props.selectedPost.title);
+  const [postDesc, setPostDesc] = useState(props.selectedPost.description);
 
-  handlePostTitleChange = (e) => {
-    this.setState({ postTitle: e.target.value });
+  const handlePostTitleChange = (e) => {
+    setPostTitle(e.target.value);
   };
-  handlePostDescChange = (e) => {
-    this.setState({ postDesc: e.target.value });
+  const handlePostDescChange = (e) => {
+    setPostDesc(e.target.value);
   };
-  handleEnter = (e) => {
-    if (e.key === "Enter" && this.state.postTitle && this.state.postDesc)
-      this.updatePost(e);
-  };
-  updatePost = (e) => {
+  const updatePost = (e) => {
     e.preventDefault();
     const post = {
-      id: this.props.selectedPost.id,
-      title: this.state.postTitle,
-      description: this.state.postDesc,
-      liked: this.props.selectedPost.liked,
+      id: props.selectedPost.id,
+      title: postTitle,
+      description: postDesc,
+      liked: props.selectedPost.liked,
     };
 
-    this.props.editBlogPost(post);
-    this.props.handleEditFormHide();
+    props.editBlogPost(post);
+    props.handleEditFormHide();
   };
-  handleEscape = (e) => {
-    if (e.key === "Escape") this.props.handleEditFormHide();
+  const handleEscape = (e) => {
+    if (e.key === "Escape") props.handleEditFormHide();
   };
-  componentDidMount() {
-    window.addEventListener("keyup", this.handleEnter);
-    window.addEventListener("keyup", this.handleEscape);
-  }
-  componentWillUnmount() {
-    window.removeEventListener("keyup", this.handleEnter);
-    window.removeEventListener("keyup", this.handleEscape);
-  }
+  useEffect(() => {
+    window.addEventListener("keyup", handleEscape);
+    return () => window.removeEventListener("keyup", handleEscape);
+  }, [props]);
 
-  render() {
-    const handleEditFormHide = this.props.handleEditFormHide;
-    return (
-      <>
-        <form className="editPostForm" onSubmit={this.updatePost}>
-          <button
-            className="hideBtn"
-            type="button"
-            onClick={handleEditFormHide}
-          >
-            <FontAwesomeIcon icon={faTimes} size="xl" />
+  return (
+    <>
+      <form className="editPostForm" onSubmit={updatePost}>
+        <button
+          className="hideBtn"
+          type="button"
+          onClick={props.handleEditFormHide}
+        >
+          <FontAwesomeIcon icon={faTimes} size="xl" />
+        </button>
+        <h2>Editing post</h2>
+        <div>
+          <input
+            className="editFormInput"
+            type="text"
+            name="postTitle"
+            placeholder="Title"
+            value={postTitle}
+            onChange={handlePostTitleChange}
+            required
+          />
+        </div>
+        <div>
+          <textarea
+            className="addFormInput"
+            name="postDescription"
+            placeholder="Information"
+            value={postDesc}
+            onChange={handlePostDescChange}
+            required
+            rows="8"
+          />
+        </div>
+        <div>
+          <button type="submit" className="blackBtn">
+            Save post
           </button>
-          <h2>Editing post</h2>
-          <div>
-            <input
-              className="editFormInput"
-              type="text"
-              name="postTitle"
-              placeholder="Title"
-              value={this.state.postTitle}
-              onChange={this.handlePostTitleChange}
-              required
-            />
-          </div>
-          <div>
-            <textarea
-              className="addFormInput"
-              name="postDescription"
-              placeholder="Information "
-              value={this.state.postDesc}
-              onChange={this.handlePostDescChange}
-              required
-              rows="8"
-            />
-          </div>
-          <div>
-            <button type="submit" className="blackBtn">
-              Save post
-            </button>
-          </div>
-        </form>
-        <div className="overlay" onClick={handleEditFormHide}></div>
-      </>
-    );
-  }
-}
+        </div>
+      </form>
+      <div className="overlay" onClick={props.handleEditFormHide}></div>
+    </>
+  );
+};
