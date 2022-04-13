@@ -1,9 +1,12 @@
 .post {
     display:flex;
-    align-items:center;
+    text-align:center;
     justify-content: space-between;
+    width: 900px;
+    margin: 0 auto;
 }
 .postControl {
     display:flex;
     align-items: center;
+    text-align:center;
 }

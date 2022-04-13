@@ -8,10 +8,7 @@ import { useParams } from "react-router-dom";
 import { postsUrl } from "../../../shared/projectData";
 import axios from "axios";
 
-export const BlogCard = ({
-  title,
-  description,
-  liked,
+export const BlogCardPage = ({
   likePost,
   deletePost,
   handleEditFormShow,
@@ -27,30 +24,23 @@ export const BlogCard = ({
   const [post, setPost] = useState({});
 
   useEffect(() => {
-    if (postId) {
-      axios
-        .get(postsUrl + postId)
-        .then((response) => {
-          setPost(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    axios
+      .get(postsUrl + postId)
+      .then((response) => {
+        setPost(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [postId, setPost]);
 
-  let heartFill;
-  if (postId) {
-    heartFill = post.liked ? "crimson" : "black";
-  } else {
-    heartFill = liked ? "crimson" : "black";
-  }
+  const heartFill = post.liked ? "crimson" : "black";
 
   return (
     <div className="post">
       <div className="postContent">
-        <h2>{postId ? post.title : title}</h2>
-        <p>{postId ? post.description : description}</p>
+        <h2>{post.title}</h2>
+        <p>{post.description}</p>
         <div>
           <button onClick={likePost}>
             <FontAwesomeIcon

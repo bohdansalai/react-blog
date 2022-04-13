@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
 
-export const LoginPage = ({ setIsLoggedIn, setUserName }) => {
+export const LoginPage = ({ setIsLoggedIn, setUserName, setIsAdmin }) => {
   const history = useNavigate();
 
   const [login, setLogin] = useState("");
@@ -17,6 +17,14 @@ export const LoginPage = ({ setIsLoggedIn, setUserName }) => {
 
   const handleLogIn = (e) => {
     e.preventDefault();
+
+    if (login === "admin") {
+      if (password === "admin") setIsAdmin(true);
+      else {
+        alert("Passwors is incorrect");
+        return false;
+      }
+    }
 
     localStorage.setItem("isLoggedIn", true);
     localStorage.setItem("userName", login);

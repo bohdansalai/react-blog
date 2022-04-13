@@ -2,6 +2,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { Component, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { postsUrl } from "../../shared/projectData";
 import { getAmountOfPosts } from "../../shared/projectLogic";
 import "./BlogPage.css";
@@ -11,7 +12,7 @@ import { EditPostForm } from "./components/EditPostForm";
 
 let source;
 
-export const BlogPage = () => {
+export const BlogPage = ({ isAdmin }) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [blogArr, setBlogArr] = useState([]);
@@ -109,16 +110,20 @@ export const BlogPage = () => {
 
   const blogPosts = blogArr.map((item, pos) => {
     return (
-      <BlogCard
-        key={item.id}
-        title={item.title}
-        description={item.description}
-        liked={item.liked}
-        likePost={() => likePost(item)}
-        deletePost={() => deletePost(item)}
-        handleEditFormShow={handleEditFormShow}
-        handleSelectPost={() => handleSelectPost(item)}
-      />
+      <React.Fragment key={item.id}>
+        <BlogCard
+          key={item.id}
+          title={item.title}
+          description={item.description}
+          liked={item.liked}
+          likePost={() => likePost(item)}
+          deletePost={() => deletePost(item)}
+          handleEditFormShow={handleEditFormShow}
+          handleSelectPost={() => handleSelectPost(item)}
+          isAdmin={isAdmin}
+        />
+        <Link to={`/blog/${item.id}`}>Open</Link>
+      </React.Fragment>
     );
   });
 
@@ -144,11 +149,14 @@ export const BlogPage = () => {
       )}
       <>
         <h1>Blog</h1>
-        <div className="addNewPost">
-          <button className="blackBtn" onClick={handleAddFormShow}>
-            Create new post
-          </button>
-        </div>
+        {isAdmin && (
+          <div className="addNewPost">
+            <button className="blackBtn" onClick={handleAddFormShow}>
+              Create new post
+            </button>
+          </div>
+        )}
+
         {isPending && (
           <FontAwesomeIcon
             icon={faSpinner}
