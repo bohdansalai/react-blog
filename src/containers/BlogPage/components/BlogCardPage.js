@@ -27,7 +27,6 @@ export const BlogCardPage = ({ isAdmin }) => {
     isError,
     error,
     isFetching,
-    refetch,
   } = useGetSinglePost(postId);
 
   const likeMutation = useLikePost();
@@ -41,24 +40,15 @@ export const BlogCardPage = ({ isAdmin }) => {
   const likePost = (blogPost) => {
     const updatedPost = { ...blogPost };
     updatedPost.liked = !updatedPost.liked;
-    likeMutation
-      .mutateAsync(updatedPost)
-      .then(refetch)
-      .catch((err) => console.log(err));
+    likeMutation.mutate(updatedPost);
   };
   const deletePost = (blogPost) => {
     if (window.confirm(`Do you want to delete ${blogPost.title}?`)) {
-      deleteMutation
-        .mutateAsync(blogPost)
-        .then(() => history("/blog"))
-        .catch((err) => console.log(err));
+      deleteMutation.mutate(blogPost);
     }
   };
   const editBlogPost = (updatedBlogPost) => {
-    editMutation
-      .mutateAsync(updatedBlogPost)
-      .then(refetch)
-      .catch((err) => console.log(err));
+    editMutation.mutate(updatedBlogPost);
   };
 
   const handleEditFormShow = (blogPost) => {

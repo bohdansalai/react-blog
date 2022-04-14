@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 function AppWithCallbackAfterRender() {
   useEffect(() => {
@@ -11,11 +12,18 @@ function AppWithCallbackAfterRender() {
   return (
     <QueryClientProvider client={queryClient}>
       <App tab="home" />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 const container = document.getElementById("root");
 const root = ReactDOM.createRoot(container);
 root.render(<AppWithCallbackAfterRender />);
