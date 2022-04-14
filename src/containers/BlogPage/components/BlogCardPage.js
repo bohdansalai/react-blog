@@ -1,48 +1,90 @@
 import React, { useEffect, useState } from "react";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
 import { faHeart, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BlogCard.css";
 import "../BlogPage.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { postsUrl } from "../../../shared/projectData";
-import axios from "axios";
+import { EditPostForm } from "./EditPostForm";
+import {
+  useDeletePost,
+  useEditPost,
+  useGetSinglePost,
+  useLikePost,
+} from "../../../shared/queries";
 
-export const BlogCardPage = ({
-  likePost,
-  deletePost,
-  handleEditFormShow,
-  handleSelectPost,
-  isAdmin,
-}) => {
-  const showEditForm = () => {
-    handleSelectPost();
-    handleEditFormShow();
+export const BlogCardPage = ({ isAdmin }) => {
+  const { postId } = useParams();
+  const [selectedPost, setSelectedPost] = useState({});
+  const [showEditForm, setShowEditForm] = useState(false);
+  const history = useNavigate();
+
+  const {
+    data: post,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  } = useGetSinglePost(postId);
+
+  const likeMutation = useLikePost();
+  const deleteMutation = useDeletePost();
+  const editMutation = useEditPost();
+
+  if (isFetching) return <h1>Loading data</h1>;
+  if (isError) return <h1>{error.message}</h1>;
+  const postsOpacity = isFetching ? 0.5 : 1;
+
+  const likePost = (blogPost) => {
+    const updatedPost = { ...blogPost };
+    updatedPost.liked = !updatedPost.liked;
+    likeMutation
+      .mutateAsync(updatedPost)
+      .then(refetch)
+      .catch((err) => console.log(err));
+  };
+  const deletePost = (blogPost) => {
+    if (window.confirm(`Do you want to delete ${blogPost.title}?`)) {
+      deleteMutation
+        .mutateAsync(blogPost)
+        .then(() => history("/blog"))
+        .catch((err) => console.log(err));
+    }
+  };
+  const editBlogPost = (updatedBlogPost) => {
+    editMutation
+      .mutateAsync(updatedBlogPost)
+      .then(refetch)
+      .catch((err) => console.log(err));
   };
 
-  const { postId } = useParams();
-  const [post, setPost] = useState({});
-
-  useEffect(() => {
-    axios
-      .get(postsUrl + postId)
-      .then((response) => {
-        setPost(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [postId, setPost]);
+  const handleEditFormShow = (blogPost) => {
+    setShowEditForm(true);
+    setSelectedPost(blogPost);
+  };
+  const handleEditFormHide = () => {
+    setShowEditForm(false);
+  };
 
   const heartFill = post.liked ? "crimson" : "black";
 
   return (
-    <div className="post">
+    <div className="post" style={{ opacity: postsOpacity }}>
+      {showEditForm && (
+        <EditPostForm
+          handleEditFormHide={handleEditFormHide}
+          selectedPost={selectedPost}
+          editBlogPost={editBlogPost}
+        />
+      )}
       <div className="postContent">
         <h2>{post.title}</h2>
         <p>{post.description}</p>
         <div>
-          <button onClick={likePost}>
+          <button onClick={() => likePost(post)}>
             <FontAwesomeIcon
               icon={faHeart}
               size="xl"
@@ -53,13 +95,20 @@ export const BlogCardPage = ({
       </div>
       {isAdmin && (
         <div className="postControl">
-          <button onClick={showEditForm}>
+          <button onClick={() => handleEditFormShow(post)}>
             <FontAwesomeIcon icon={faEdit} size="xl" />
           </button>
-          <button className="deleteBtn" onClick={deletePost}>
+          <button className="deleteBtn" onClick={() => deletePost(post)}>
             <FontAwesomeIcon icon={faTrash} size="xl" />
           </button>
         </div>
+      )}
+      {isFetching && (
+        <FontAwesomeIcon
+          icon={faSpinner}
+          className="icon-spin preloader"
+          size="xl"
+        />
       )}
     </div>
   );

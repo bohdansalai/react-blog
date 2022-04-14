@@ -5,93 +5,70 @@ import React, { Component, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { postsUrl } from "../../shared/projectData";
 import { getAmountOfPosts } from "../../shared/projectLogic";
+import {
+  useAddPost,
+  useDeletePost,
+  useEditPost,
+  useGetPosts,
+  useLikePost,
+} from "../../shared/queries";
 import "./BlogPage.css";
 import { AddPostForm } from "./components/AddPostForm";
 import { BlogCard } from "./components/BlogCard";
 import { EditPostForm } from "./components/EditPostForm";
 
-let source;
-
 export const BlogPage = ({ isAdmin }) => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-  const [blogArr, setBlogArr] = useState([]);
-  const [isPending, setIsPending] = useState(false);
   const [selectedPost, setSelectedPost] = useState({});
 
-  const fetchPosts = () => {
-    source = axios.CancelToken.source();
-    axios
-      .get(postsUrl, { cancelToken: source.token })
-      .then((response) => {
-        setBlogArr(response.data);
-        setIsPending(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const {
+    data: posts,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  } = useGetPosts();
 
-  useEffect(() => {
-    fetchPosts();
-    return () => {
-      if (source) {
-        source.cancel();
-      }
-    };
-  }, []);
+  const likeMutation = useLikePost();
+  const deleteMutation = useDeletePost();
+  const editMutation = useEditPost();
+  const addMutation = useAddPost();
+
+  if (isLoading) return <h1>Loading data</h1>;
+  if (isError) return <h1>{error.message}</h1>;
 
   const likePost = (blogPost) => {
-    const temp = { ...blogPost };
-    temp.liked = !temp.liked;
-    axios
-      .put(postsUrl + blogPost.id, temp)
-      .then((response) => {
-        console.log(response);
-        fetchPosts();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const updatedPost = { ...blogPost };
+    updatedPost.liked = !updatedPost.liked;
+    likeMutation
+      .mutateAsync(updatedPost)
+      .then(refetch)
+      .catch((err) => console.log(err));
   };
   const deletePost = (blogPost) => {
     if (window.confirm(`Do you want to delete ${blogPost.title}?`)) {
-      setIsPending(true);
-      axios
-        .delete(postsUrl + blogPost.id)
-        .then((response) => {
-          console.log("post deleted " + response.data);
-          fetchPosts();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      deleteMutation
+        .mutateAsync(blogPost)
+        .then(refetch)
+        .catch((err) => console.log(err));
     }
   };
-  const addNewBlogPost = (blogPost) => {
-    setIsPending(true);
-    axios
-      .post(postsUrl, blogPost)
-      .then((response) => {
-        console.log("created post ", response.data);
-        fetchPosts();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const editBlogPost = (updatedBlogPost) => {
-    console.log(updatedBlogPost);
-    setIsPending(true);
-    axios
-      .put(postsUrl + updatedBlogPost.id, updatedBlogPost)
-      .then((response) => {
-        fetchPosts();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    editMutation
+      .mutateAsync(updatedBlogPost)
+      .then(refetch)
+      .catch((err) => console.log(err));
   };
+
+  const addNewBlogPost = (newBlogPost) => {
+    addMutation
+      .mutateAsync(newBlogPost)
+      .then(refetch)
+      .catch((err) => console.log(err));
+  };
+
   const handleAddFormShow = () => {
     setShowAddForm(true);
   };
@@ -108,7 +85,7 @@ export const BlogPage = ({ isAdmin }) => {
     setSelectedPost(blogPost);
   };
 
-  const blogPosts = blogArr.map((item, pos) => {
+  const blogPosts = posts.map((item, pos) => {
     return (
       <React.Fragment key={item.id}>
         <BlogCard
@@ -127,15 +104,12 @@ export const BlogPage = ({ isAdmin }) => {
     );
   });
 
-  if (blogArr.length === 0) return <h1>Loading data</h1>;
-
-  const postsOpacity = isPending ? 0.5 : 1;
+  const postsOpacity = isFetching ? 0.5 : 1;
 
   return (
     <div className="blogPage">
       {showAddForm && (
         <AddPostForm
-          blogArr={blogArr}
           addNewBlogPost={addNewBlogPost}
           handleAddFormHide={handleAddFormHide}
         />
@@ -157,7 +131,7 @@ export const BlogPage = ({ isAdmin }) => {
           </div>
         )}
 
-        {isPending && (
+        {isFetching && (
           <FontAwesomeIcon
             icon={faSpinner}
             className="icon-spin preloader"

@@ -4,9 +4,6 @@ import { faHeart, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BlogCard.css";
 import "../BlogPage.css";
-import { useParams } from "react-router-dom";
-import { postsUrl } from "../../../shared/projectData";
-import axios from "axios";
 
 export const BlogCard = ({
   title,
@@ -23,34 +20,13 @@ export const BlogCard = ({
     handleEditFormShow();
   };
 
-  const { postId } = useParams();
-  const [post, setPost] = useState({});
-
-  useEffect(() => {
-    if (postId) {
-      axios
-        .get(postsUrl + postId)
-        .then((response) => {
-          setPost(response.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [postId, setPost]);
-
-  let heartFill;
-  if (postId) {
-    heartFill = post.liked ? "crimson" : "black";
-  } else {
-    heartFill = liked ? "crimson" : "black";
-  }
+  const heartFill = liked ? "crimson" : "black";
 
   return (
     <div className="post">
       <div className="postContent">
-        <h2>{postId ? post.title : title}</h2>
-        <p>{postId ? post.description : description}</p>
+        <h2>{title}</h2>
+        <p>{description}</p>
         <div>
           <button onClick={likePost}>
             <FontAwesomeIcon
