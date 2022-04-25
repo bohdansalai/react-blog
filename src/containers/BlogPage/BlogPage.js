@@ -72,7 +72,11 @@ export const BlogPage = ({ isAdmin }) => {
         <BlogCard
           key={item.id}
           title={item.title}
-          description={item.description}
+          description={
+            item.description.length > 200
+              ? item.description.slice(0, 200) + "..."
+              : item.description
+          }
           liked={item.liked}
           likePost={() => likePost(item)}
           deletePost={() => deletePost(item)}
