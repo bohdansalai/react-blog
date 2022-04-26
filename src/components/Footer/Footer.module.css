@@ -1,6 +1,6 @@
 footer {
     height: 50px;
-    background-color: #393939;
+    background-color: black;
     display: flex;
     align-items: center;
     justify-content: center
@@ -8,13 +8,7 @@ footer {
 
   footer span {
     vertical-align: middle;
-    font-weight: 400;
+    font-weight: 100;
     font-size: 18px;
     color: white
-  }
-
-  .btn{
-    background-color: crimson;
-    border-radius: 5px;
-    margin-left: 3px;
   }

@@ -66,8 +66,8 @@ export const EditPostForm = (props) => {
             rows="8"
           />
         </div>
-        <div>
-          <button type="submit" className="blackBtn">
+        <div className="addPostControl">
+          <button type="submit" className="commonBtn">
             Save post
           </button>
         </div>

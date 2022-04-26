@@ -1,12 +1,21 @@
-.post {
-    display:flex;
-    text-align:center;
-    justify-content: space-between;
-    width: 900px;
-    margin: 0 auto;
+.post{
+border: 3px solid black;
+padding: 10px;
+margin-bottom: 20px;
 }
-.postControl {
-    display:flex;
-    align-items: center;
-    text-align:center;
+.postControl{
+    display: flex;
+    justify-content: end;
+    padding-top: 5px;
+}
+.postHeaderDiv{
+    display: flex;
+    justify-content: space-between;
+}
+.postHeaderDiv:first-child{
+    font-size: 25px;
+    font-weight: 500;
+}
+.postDesc{
+    margin-bottom: 5px;
 }

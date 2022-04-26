@@ -8,6 +8,7 @@
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
+  font-weight: 100;
 }
 
 a {
@@ -35,9 +36,6 @@ main {
   min-height: calc(100vh - 100px);
 }
 
-h1 {
-  text-align: center;
-}
 .icon-spin {
   -webkit-animation: icon-spin 0.7s infinite linear;
           animation: icon-spin 0.7s infinite linear;
@@ -64,13 +62,14 @@ h1 {
             transform: rotate(359deg);
   }
 }
-.blackBtn{
-  padding: 10px;
-  border-radius: 8px;
-  background-color: black;
-  color:white;
-  transition: .2s;
+.commonBtn{
+  color: black;
+  border: 3px solid black;
+  padding: 2px 10px 2px 10px;
+  font-weight: 500;
+  margin-left: 5px;
 }
-.blackBtn:hover{
-  background-color: rgba(1,1,1,0.8);
+.commonBtn:hover{
+  color: white;
+  background-color: black;
 }

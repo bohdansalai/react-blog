@@ -1,8 +1,7 @@
-import { red } from "@material-ui/core/colors";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
-import { posts, postsUrl } from "./projectData";
+import { postsUrl } from "./projectData";
 
 export const useGetPosts = () => {
   return useQuery("posts", () => {

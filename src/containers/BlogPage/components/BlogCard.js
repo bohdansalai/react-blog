@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { faHeart, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import React from "react";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BlogCard.css";
 import "../BlogPage.css";
+import { Link } from "react-router-dom";
 
 export const BlogCard = ({
+  id,
   title,
   description,
   liked,
@@ -25,28 +26,37 @@ export const BlogCard = ({
   return (
     <div className="post">
       <div className="postContent">
-        <h2>{title}</h2>
-        <p>{description}</p>
-        <div>
-          <button onClick={likePost}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              size="xl"
-              style={{ color: heartFill }}
-            />
-          </button>
+        <div className="postHeaderDiv">
+          <div>{title}</div>
+          <div>
+            <button onClick={likePost}>
+              <FontAwesomeIcon
+                icon={faHeart}
+                size="xl"
+                style={{ color: heartFill }}
+              />
+            </button>
+          </div>
+        </div>
+        <div className="postDesc">{description}</div>
+
+        <div className="postControl">
+          {isAdmin && (
+            <div>
+              <button className="commonBtn" onClick={showEditForm}>
+                Edit
+              </button>
+              <button className="commonBtn" onClick={deletePost}>
+                Delete
+              </button>
+            </div>
+          )}
+
+          <Link className="commonBtn" to={`/blog/${id}`}>
+            Open
+          </Link>
         </div>
       </div>
-      {isAdmin && (
-        <div className="postControl">
-          <button onClick={showEditForm}>
-            <FontAwesomeIcon icon={faEdit} size="xl" />
-          </button>
-          <button className="deleteBtn" onClick={deletePost}>
-            <FontAwesomeIcon icon={faTrash} size="xl" />
-          </button>
-        </div>
-      )}
     </div>
   );
 };

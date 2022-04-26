@@ -1,10 +1,9 @@
 import React from "react";
 import styles from "./Footer.module.css";
-export const Footer = ({ year }) => {
+export const Footer = () => {
   return (
     <footer>
-      <span>{year}</span>
-      <button className={styles.btn}>Click here</button>
+      <span>Example of simple blog on react.js</span>
     </footer>
   );
 };

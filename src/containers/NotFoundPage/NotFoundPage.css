@@ -1,6 +1,8 @@
 .ant-result-404{
-text-align: center;
-padding-top:30px;
+    position: fixed;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
 }
 .ant-result-extra{
     padding-top: 20px;

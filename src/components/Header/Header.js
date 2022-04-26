@@ -1,10 +1,16 @@
-import { faSignOut } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import styles from "./Header.module.css";
+import { AddPostForm } from "../../containers/BlogPage/components/AddPostForm";
+import { useAddPost } from "../../shared/queries";
+import "./Header.css";
 
-export const Header = ({ isLoggedIn, setIsLoggedIn, userName, setIsAdmin }) => {
+export const Header = ({
+  isLoggedIn,
+  setIsLoggedIn,
+  userName,
+  isAdmin,
+  setIsAdmin,
+}) => {
   const handleLogOut = () => {
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("userName");
@@ -12,21 +18,50 @@ export const Header = ({ isLoggedIn, setIsLoggedIn, userName, setIsAdmin }) => {
     setIsAdmin(false);
   };
 
+  const [showAddForm, setShowAddForm] = useState(false);
+  const addMutation = useAddPost();
+
+  const addNewBlogPost = (newBlogPost) => {
+    addMutation.mutate(newBlogPost);
+  };
+  const handleAddFormHide = () => {
+    setShowAddForm(false);
+  };
+  const handleAddFormShow = () => {
+    setShowAddForm(true);
+    console.log("ddd");
+  };
+
   return (
     <header>
-      {isLoggedIn ? (
-        <nav>
-          Welcome, {userName}
-          <NavLink
-            onClick={handleLogOut}
-            className={({ isActive }) => (isActive ? styles.activeLink : "")}
-            to="/login"
-          >
-            <FontAwesomeIcon icon={faSignOut} /> Log out
-          </NavLink>
-        </nav>
-      ) : (
-        "Hi you"
+      <div className="headerInner">
+        <div>MY BLOG IN REACT</div>
+        {isLoggedIn ? (
+          <div>
+            Logged in as&nbsp; <span>{userName}</span>
+            &nbsp;&nbsp;
+            {isAdmin && (
+              <>
+                <button className="commonBtn" onClick={handleAddFormShow}>
+                  Create new post
+                </button>
+              </>
+            )}
+            {
+              <>
+                <NavLink onClick={handleLogOut} to="/login">
+                  <button className="commonBtn">Log out</button>
+                </NavLink>
+              </>
+            }
+          </div>
+        ) : null}
+      </div>
+      {showAddForm && (
+        <AddPostForm
+          addNewBlogPost={addNewBlogPost}
+          handleAddFormHide={handleAddFormHide}
+        />
       )}
     </header>
   );

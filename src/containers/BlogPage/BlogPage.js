@@ -1,10 +1,7 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
 import React, { Component, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { postsUrl } from "../../shared/projectData";
-import { getAmountOfPosts } from "../../shared/projectLogic";
+import "./components/AddPostForm.css";
 import {
   useAddPost,
   useDeletePost,
@@ -29,7 +26,14 @@ export const BlogPage = ({ isAdmin }) => {
   const editMutation = useEditPost();
   const addMutation = useAddPost();
 
-  if (isLoading) return <h1>Loading data</h1>;
+  if (isLoading)
+    return (
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className="icon-spin preloader"
+        size="xl"
+      />
+    );
   if (isError) return <h1>{error.message}</h1>;
 
   const likePost = (blogPost) => {
@@ -52,6 +56,7 @@ export const BlogPage = ({ isAdmin }) => {
 
   const handleAddFormShow = () => {
     setShowAddForm(true);
+    console.log("ddd");
   };
   const handleAddFormHide = () => {
     setShowAddForm(false);
@@ -71,6 +76,7 @@ export const BlogPage = ({ isAdmin }) => {
       <React.Fragment key={item.id}>
         <BlogCard
           key={item.id}
+          id={item.id}
           title={item.title}
           description={
             item.description.length > 200
@@ -84,7 +90,6 @@ export const BlogPage = ({ isAdmin }) => {
           handleSelectPost={() => handleSelectPost(item)}
           isAdmin={isAdmin}
         />
-        <Link to={`/blog/${item.id}`}>Open</Link>
       </React.Fragment>
     );
   });
@@ -107,15 +112,6 @@ export const BlogPage = ({ isAdmin }) => {
         />
       )}
       <>
-        <h1>Blog</h1>
-        {isAdmin && (
-          <div className="addNewPost">
-            <button className="blackBtn" onClick={handleAddFormShow}>
-              Create new post
-            </button>
-          </div>
-        )}
-
         {isFetching && (
           <FontAwesomeIcon
             icon={faSpinner}

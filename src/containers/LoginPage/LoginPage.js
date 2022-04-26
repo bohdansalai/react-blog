@@ -35,33 +35,31 @@ export const LoginPage = ({ setIsLoggedIn, setUserName, setIsAdmin }) => {
   };
 
   return (
-    <h1>
-      <form className="loginForm" onSubmit={handleLogIn}>
-        <h3>Authorization</h3>
-        <div>
-          <input
-            className="loginFormInput"
-            type="text"
-            placeholder="login"
-            required
-            onChange={handleLoginChange}
-          />
-        </div>
-        <div>
-          <input
-            className="loginFormInput"
-            type="password"
-            placeholder="password"
-            required
-            onChange={handlePasswordChange}
-          />
-        </div>
-        <div>
-          <button type="submit" className="blackBtn">
-            Log in
-          </button>
-        </div>
-      </form>
-    </h1>
+    <form className="loginForm" onSubmit={handleLogIn}>
+      <h2>Authorization</h2>
+      <div>
+        <input
+          className="loginFormInput"
+          type="text"
+          placeholder="login"
+          required
+          onChange={handleLoginChange}
+        />
+      </div>
+      <div>
+        <input
+          className="loginFormInput"
+          type="password"
+          placeholder="password"
+          required
+          onChange={handlePasswordChange}
+        />
+      </div>
+      <div className="addPostControl">
+        <button type="submit" className="commonBtn">
+          Log in
+        </button>
+      </div>
+    </form>
   );
 };

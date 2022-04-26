@@ -1,0 +1,23 @@
+  header{
+    border-bottom:  3px solid black;
+  }
+
+  header div.headerInner{
+    width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  header div :first-child{
+    font-weight: 500;
+  }
+  header div :nth-child(2){
+    justify-content: end;
+  }
+  header div :nth-child(2) span{
+  font-weight: 500;
+  }

@@ -58,8 +58,8 @@ export const AddPostForm = (props) => {
             rows="8"
           />
         </div>
-        <div>
-          <button type="submit" className="blackBtn">
+        <div className="addPostControl">
+          <button type="submit" className="commonBtn">
             Add post
           </button>
         </div>

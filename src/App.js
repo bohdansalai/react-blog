@@ -35,6 +35,7 @@ export function App() {
             isLoggedIn={isLoggedIn}
             setIsLoggedIn={setIsLoggedIn}
             setIsAdmin={setIsAdmin}
+            isAdmin={isAdmin}
           />
           <main>
             <Routes>
@@ -72,7 +73,7 @@ export function App() {
               <Route path="*" element={<Navigate to="/404" />} />
             </Routes>
           </main>
-          <Footer year={new Date().getFullYear()} />
+          <Footer />
         </div>
       </Router>
     </React.StrictMode>

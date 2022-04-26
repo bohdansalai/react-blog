@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
-import { faHeart, faTrash, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./BlogCard.css";
 import "../BlogPage.css";
-import { useParams, useNavigate } from "react-router-dom";
-import { postsUrl } from "../../../shared/projectData";
+import "./BlogCardPage.css";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { EditPostForm } from "./EditPostForm";
 import {
   useDeletePost,
@@ -33,7 +32,14 @@ export const BlogCardPage = ({ isAdmin }) => {
   const deleteMutation = useDeletePost();
   const editMutation = useEditPost();
 
-  if (isFetching) return <h1>Loading data</h1>;
+  if (isFetching)
+    return (
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className="icon-spin preloader"
+        size="xl"
+      />
+    );
   if (isError) return <h1>{error.message}</h1>;
   const postsOpacity = isFetching ? 0.5 : 1;
 
@@ -62,44 +68,56 @@ export const BlogCardPage = ({ isAdmin }) => {
   const heartFill = post.liked ? "crimson" : "black";
 
   return (
-    <div className="post" style={{ opacity: postsOpacity }}>
-      {showEditForm && (
-        <EditPostForm
-          handleEditFormHide={handleEditFormHide}
-          selectedPost={selectedPost}
-          editBlogPost={editBlogPost}
-        />
-      )}
-      <div className="postContent">
-        <h2>{post.title}</h2>
-        <p>{post.description}</p>
-        <div>
-          <button onClick={() => likePost(post)}>
-            <FontAwesomeIcon
-              icon={faHeart}
-              size="xl"
-              style={{ color: heartFill }}
-            />
-          </button>
+    <div className="posts">
+      <div className="onePost" style={{ opacity: postsOpacity }}>
+        {showEditForm && (
+          <EditPostForm
+            handleEditFormHide={handleEditFormHide}
+            selectedPost={selectedPost}
+            editBlogPost={editBlogPost}
+          />
+        )}
+        <div className="postContent">
+          <div className="postHeaderDiv">
+            <div>{post.title}</div>
+            <div>
+              <button onClick={() => likePost(post)}>
+                <FontAwesomeIcon
+                  icon={faHeart}
+                  size="xl"
+                  style={{ color: heartFill }}
+                />
+              </button>
+            </div>
+          </div>
+          <span>{post.description}</span>
         </div>
-      </div>
-      {isAdmin && (
         <div className="postControl">
-          <button onClick={() => handleEditFormShow(post)}>
-            <FontAwesomeIcon icon={faEdit} size="xl" />
-          </button>
-          <button className="deleteBtn" onClick={() => deletePost(post)}>
-            <FontAwesomeIcon icon={faTrash} size="xl" />
-          </button>
+          {isAdmin && (
+            <>
+              <button
+                className="commonBtn"
+                onClick={() => handleEditFormShow(post)}
+              >
+                Edit
+              </button>
+              <button className="commonBtn" onClick={() => deletePost(post)}>
+                Delete
+              </button>
+            </>
+          )}
+          <Link className="commonBtn" to="/">
+            Go back
+          </Link>
         </div>
-      )}
-      {isFetching && (
-        <FontAwesomeIcon
-          icon={faSpinner}
-          className="icon-spin preloader"
-          size="xl"
-        />
-      )}
+        {isFetching && (
+          <FontAwesomeIcon
+            icon={faSpinner}
+            className="icon-spin preloader"
+            size="xl"
+          />
+        )}
+      </div>
     </div>
   );
 };
