@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AddPostForm } from "../../containers/BlogPage/components/AddPostForm";
 import { useAddPost } from "../../shared/queries";
 import "./Header.css";
@@ -35,7 +35,11 @@ export const Header = ({
   return (
     <header>
       <div className="headerInner">
-        <div>MY BLOG IN REACT</div>
+        <div>
+          <Link className="commonBtn" to="/">
+            MY BLOG IN REACT
+          </Link>
+        </div>
         {isLoggedIn ? (
           <div>
             Logged in as&nbsp; <span>{userName}</span>
