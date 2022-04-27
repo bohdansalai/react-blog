@@ -37,6 +37,7 @@ export const LoginPage = ({ setIsLoggedIn, setUserName, setIsAdmin }) => {
   return (
     <form className="loginForm" onSubmit={handleLogIn}>
       <h2>Authorization</h2>
+      <p>admin - login: admin; password: admin. normal user - whatever </p>
       <div>
         <input
           className="loginFormInput"
