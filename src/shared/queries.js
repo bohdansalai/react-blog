@@ -64,8 +64,8 @@ export const useDeletePost = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("posts");
-        if (locaion !== "/blog") {
-          history("/blog");
+        if (locaion !== "/react-blog/blog") {
+          history("/react-blog/blog");
         }
       },
       onError: (error) => {

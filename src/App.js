@@ -40,7 +40,7 @@ export function App() {
           <main>
             <Routes>
               <Route
-                path="/login"
+                path="/react-blog/login"
                 element={
                   <PublicRoute isLoggedIn={isLoggedIn}>
                     <LoginPage
@@ -52,7 +52,7 @@ export function App() {
                 }
               />
               <Route
-                path="/blog/:postId"
+                path="/react-blog/blog/:postId"
                 element={
                   <PrivateRoute isLoggedIn={isLoggedIn}>
                     <BlogCardPage isAdmin={isAdmin} />
@@ -60,7 +60,7 @@ export function App() {
                 }
               />
               <Route
-                path="/blog"
+                path="/react-blog/blog"
                 element={
                   <PrivateRoute isLoggedIn={isLoggedIn}>
                     <BlogPage isAdmin={isAdmin} />
@@ -68,9 +68,15 @@ export function App() {
                 }
               />
 
-              <Route path="/404" element={<NotFoundPage />} />
-              <Route path="/" element={<Navigate to="/blog" />} />
-              <Route path="*" element={<Navigate to="/404" />} />
+              <Route path="/react-blog/404" element={<NotFoundPage />} />
+              <Route
+                path="/react-blog/"
+                element={<Navigate to="/react-blog/blog" />}
+              />
+              <Route
+                path="/react-blog/*"
+                element={<Navigate to="/react-blog/404" />}
+              />
             </Routes>
           </main>
           <Footer />

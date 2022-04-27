@@ -53,7 +53,7 @@ export const Header = ({
             )}
             {
               <>
-                <NavLink onClick={handleLogOut} to="/login">
+                <NavLink onClick={handleLogOut} to="/react-blog/login">
                   <button className="commonBtn">Log out</button>
                 </NavLink>
               </>

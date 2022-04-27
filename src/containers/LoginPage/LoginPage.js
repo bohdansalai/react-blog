@@ -31,7 +31,7 @@ export const LoginPage = ({ setIsLoggedIn, setUserName, setIsAdmin }) => {
 
     setUserName(login);
     setIsLoggedIn(true);
-    history("/");
+    history("/react-blog");
   };
 
   return (

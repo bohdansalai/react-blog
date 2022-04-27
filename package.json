@@ -1,7 +1,7 @@
 {
   "name": "react-blog",
   "version": "0.1.0",
-  "homepage": "https://bohdansalai.github.io/login",
+  "homepage": "https://bohdansalai.github.io/react-blog",
   "private": true,
   "dependencies": {
     "-": "^0.0.1",

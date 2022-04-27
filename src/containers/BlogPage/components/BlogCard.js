@@ -52,7 +52,7 @@ export const BlogCard = ({
             </div>
           )}
 
-          <Link className="commonBtn" to={`/blog/${id}`}>
+          <Link className="commonBtn" to={`/react-blog/blog/${id}`}>
             Open
           </Link>
         </div>
